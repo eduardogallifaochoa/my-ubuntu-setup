@@ -1,0 +1,8 @@
+enabled
+active
+ii  open-vm-tools                                    2:12.5.0-1~ubuntu0.24.04.2                       amd64        Open VMware Tools for virtual machines hosted on VMware (CLI)
+ii  open-vm-tools-desktop                            2:12.5.0-1~ubuntu0.24.04.2                       amd64        Open VMware Tools for virtual machines hosted on VMware (GUI)
+ii  xserver-xorg-video-vmware                        1:13.4.0-1build1                                 amd64        X.Org X server -- VMware display driver
+
+GDM Wayland setting:
+10:WaylandEnable=false

@@ -1,4 +1,4 @@
-# my-linux-setup
+# my-ubuntu-setup
 
 Portable Ubuntu setup for quickly restoring my environment.
 
@@ -9,19 +9,21 @@ Portable Ubuntu setup for quickly restoring my environment.
 - Snap packages (if exported)
 - VSCode settings + extensions list
 - GNOME settings (dconf)
+- Printer notes, including the Epson L3250 queue
+- VMware Tools notes for clipboard/display integration
 - Nerd Font (JetBrains Mono Nerd Font)
 - ChatGPT web shortcut (opens in default browser)
 
 ## Install on a fresh Ubuntu
 ```bash
-git clone <your-private-repo-url>
-cd my-linux-setup
+git clone https://github.com/eduardogallifaochoa/my-ubuntu-setup.git
+cd my-ubuntu-setup
 bash install.sh
 ```
 
 ## One-liner install
 ```bash
-git clone https://github.com/eduardogallifaochoa/my-linux-setup.git && cd my-linux-setup && bash install.sh
+git clone https://github.com/eduardogallifaochoa/my-ubuntu-setup.git && cd my-ubuntu-setup && bash install.sh
 ```
 
 ## Manual steps (if needed)
@@ -29,9 +31,12 @@ git clone https://github.com/eduardogallifaochoa/my-linux-setup.git && cd my-lin
 - Open a new terminal or run: `exec zsh`
 - If VSCode CLI missing, install VSCode then re-run extensions step.
 - GNOME settings will be restored from `gnome/dconf-settings.ini` if present.
+- To recreate the Epson L3250 queue, see `packages/printers.txt`.
+- For VMware clipboard issues, see `packages/vmware-tools.txt`.
 
 ## Notes
 - Secrets are intentionally excluded. Do not commit SSH keys or tokens.
+- VSCode history, globalStorage, sync state, and workspaceStorage are intentionally excluded because they can contain private sessions or machine-specific cache.
 - `packages/snap-list.txt` may be a placeholder if snapd was not responding.
 
 ## Re-export from current machine
@@ -46,7 +51,7 @@ git clone https://github.com/eduardogallifaochoa/my-linux-setup.git && cd my-lin
 
 ## Quick update (this machine)
 ```bash
-cd /home/eduardogallifa/Proyectos/my-linux-setup
+cd /home/eduardogallifa/Desktop/my-ubuntu-setup
 ./scripts/export_current.sh
 git add .
 git commit -m "Update setup"

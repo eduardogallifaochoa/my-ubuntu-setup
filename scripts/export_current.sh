@@ -2,6 +2,7 @@
 set -euo pipefail
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+target_user="${SUDO_USER:-$(basename "$HOME")}"
 
 log() { printf '%s\n' "$*"; }
 
@@ -13,7 +14,7 @@ copy_if_exists() {
   fi
 }
 
-mkdir -p "$repo_dir/dotfiles" "$repo_dir/zsh" "$repo_dir/packages" "$repo_dir/vscode" "$repo_dir/gnome"
+mkdir -p "$repo_dir/dotfiles" "$repo_dir/zsh" "$repo_dir/packages" "$repo_dir/vscode/User" "$repo_dir/gnome"
 
 log "Exporting apt manual list..."
 apt-mark showmanual > "$repo_dir/packages/apt-manual.txt"
@@ -50,12 +51,57 @@ fi
 if [ -d "$HOME/.zsh" ]; then
   rm -rf "$repo_dir/zsh/.zsh"
   cp -a "$HOME/.zsh" "$repo_dir/zsh/.zsh"
+  find "$repo_dir/zsh/.zsh" -type d -name '*.bak_*' -prune -exec rm -rf {} +
 fi
 
-log "Copying VSCode settings..."
+log "Copying VSCode portable settings..."
 if [ -d "$HOME/.config/Code/User" ]; then
   rm -rf "$repo_dir/vscode/User"
-  cp -a "$HOME/.config/Code/User" "$repo_dir/vscode/User"
+  mkdir -p "$repo_dir/vscode/User"
+
+  for file in settings.json keybindings.json tasks.json; do
+    copy_if_exists "$HOME/.config/Code/User/$file" "$repo_dir/vscode/User/"
+  done
+
+  if [ -d "$HOME/.config/Code/User/snippets" ]; then
+    cp -a "$HOME/.config/Code/User/snippets" "$repo_dir/vscode/User/snippets"
+  fi
+fi
+
+log "Exporting system notes..."
+{
+  printf 'Date: '
+  date -Iseconds
+  printf 'Hostname: '
+  hostname
+  printf 'Kernel: '
+  uname -a
+  printf '\nOS release:\n'
+  cat /etc/os-release
+  printf '\nCPU architecture: '
+  uname -m
+  printf '\nDefault shell: '
+  getent passwd "$target_user" | cut -d: -f7
+} > "$repo_dir/packages/system-info.txt"
+
+if command -v lpstat >/dev/null 2>&1; then
+  log "Exporting printer notes..."
+  {
+    lpstat -p -v -d 2>/dev/null || true
+    printf '\nModels:\n'
+    lpinfo -m 2>/dev/null | grep -Ei 'L3250|Epson-L3250' || true
+  } > "$repo_dir/packages/printers.txt"
+fi
+
+if command -v systemctl >/dev/null 2>&1; then
+  log "Exporting VMware tools notes..."
+  {
+    systemctl is-enabled open-vm-tools 2>/dev/null || true
+    systemctl is-active open-vm-tools 2>/dev/null || true
+    dpkg -l | grep -E 'open-vm-tools|open-vm-tools-desktop|xserver-xorg-video-vmware' || true
+    printf '\nGDM Wayland setting:\n'
+    grep -n '^WaylandEnable=false' /etc/gdm3/custom.conf 2>/dev/null || true
+  } > "$repo_dir/packages/vmware-tools.txt"
 fi
 
 if command -v dconf >/dev/null 2>&1; then

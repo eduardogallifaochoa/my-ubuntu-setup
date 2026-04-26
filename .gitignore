@@ -7,6 +7,13 @@ id_ed25519*
 **/secrets/**
 **/*token*
 
+# VSCode local state and caches
+vscode/User/History/
+vscode/User/globalStorage/
+vscode/User/workspaceStorage/
+vscode/User/sync/
+vscode/User/chatLanguageModels.json
+
 # OS/Editor
 .DS_Store
 Thumbs.db
@@ -17,3 +24,4 @@ zsh_export/
 
 # Backups
 *.bak_*
+*.bak_*/

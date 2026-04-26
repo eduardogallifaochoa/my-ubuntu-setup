@@ -1,0 +1,6 @@
+printer Epson_L3250 is idle.  enabled since Sat Apr 25 21:52:02 2026
+device for Epson_L3250: socket://192.168.1.98:9100
+system default destination: Epson_L3250
+
+Models:
+escpr:0/cups/model/epson-inkjet-printer-escpr/Epson-L3250_Series-epson-escpr-en.ppd EPSON L3250 Series , Epson Inkjet Printer Driver (ESC/P-R) for Linux

@@ -44,5 +44,8 @@
     "scminput": false
   },
   "chat.viewSessions.orientation": "stacked",
-  "redhat.telemetry.enabled": true
+  "redhat.telemetry.enabled": true,
+  "git.enableSmartCommit": true,
+  "chat.mcp.gallery.enabled": true,
+  "python.analysis.typeCheckingMode": "basic"
 }
